@@ -50,3 +50,29 @@ There are around 3,000 labels in the dataset corrseponding to 40 categories of l
 
 
 
+
+
+
+
+
+
+
+
+------
+
+
+
+#### LICENSE
+
+CUAD is licensed under the Creative Commons Attribution 4.0 (CC BY 4.0) license and free to the public for commercial and non-commercial use.
+
+We make no representations or warranties regarding the license status of the underlying contracts, which are publicly available and downloadable from EDGAR.
+
+
+
+##### Privacy Policy & Disclaimers
+
+The categories or the contracts included in the dataset are not comprehensive or representative. We encourage the public to help us improve them by sending us your comments and suggestions to info@atticusprojectai.org. Comments and suggestions will be reviewed by The Atticus Project at its discretion and will be included in future versions of Atticus categories once approved.
+
+The use of CUAD is subject to our privacy policy https://www.atticusprojectai.org/privacy-policy and disclaimer https://www.atticusprojectai.org/disclaimer.
+
