@@ -1,0 +1,21 @@
+Clause,Label 1,Label 1-Answer,Label 2,Label 2-Answer
+JOINT SUPPLY AND MARKETING AGREEMENT,Document Name,JOINT SUPPLY AND MARKETING AGREEMENT
+"Bunker One (USA) Inc., ""Bunker One"", Vertex Energy Operating, LLC, ""Vertex"", Vertex Energy Operating, LLC, ""Bunker One"", Bunker One (USA) Inc.",Parties,"Bunker One (USA) Inc. (""Bunker One""); Vertex Energy Operating LLC (""Vertex"")"
+"10t h day of January, 2020",Agreement Date,01/10/2020
+"May 1, 2020, ""Effective Date"" means the date as of which the last signature of a Party is affixed hereto., May 1, 2020",Effective Date,05/01/2020
+"The term of this JSMA shall commence on May 1, 2020 (the ""Commencement Date"") and ends at April 30, 2029 (the ""Term""), with automatic renewals each for a period of five (5) years (a ""Renewal Term"") unless notice is given pursuant to 5.2.",Expiration Date,04/30/2029,Renewal Term,successive 5 years
+"This JSMA will be terminated as of the end of the Term or any Renewal Term, by either Party giving written notice of non-renewal to the other Party no less than 120 prior to the applicable expiry date (the ""Termination Period"").",Notice Period To Terminate Renewal,120 days
+"This Agreement shall be governed, interpreted and construed in accordance with the laws of the State of Alabama, without giving effect to its conflict of laws provisions.",Governing Law,Alabama
+"It is agreed that only Bunker One will be marketing this JSMA and the JSMA Output towards various customers, but if a Party receives a Nomination (being a written or oral request by/from a customer to a Party stating delivery place, delivery date and window etc.) or any other communication from a customer regarding the supply of Product (either spot or whole cargo) in the Area, the Party is obliged to forward the Nomination to Bunker One and refer the customer to Bunker One.",Exclusivity,Yes
+"During the Term, neither Vertex nor any affiliate of Vertex may sell any Product to any customers for their use as bunker fuel other than pursuant to the terms of this JSMA.",Exclusivity,Yes
+All sales towards customers for bunker fuel will be carried out exclusively by Bunker One in accordance to the terms set forth herein.,Exclusivity,Yes
+All sales towards customers for bunker fuel will be carried out exclusively by Bunker One in accordance to the terms set forth herein. As such all communication with customers shall go via Bunker One unless otherwise is specific written agreed in advance.,Exclusivity,Yes
+A Party may terminate the JSMA immediately upon the delivery of written notice to the other Party if there has been a Change in Control.,Change of Control,Yes
+"Neither Party shall assign or transfer any rights or obligations hereunder without the express prior written consent of the other Party, which may not be unreasonably withheld.",Anti-assignment,Yes
+The JSMA will generate either a profit or a loss which shall be distributed between the Parties as set out forth further below in this clause.,Revenue/Profit Sharing,Yes
+"If any such quarterly detailed ledger statement, or the final detailed ledger statement issued by Bunker One, shows positive Remaining Exposure for the pe- riod covered by the statement, then Bunker One shall pay [****] percent ([****]%) of such amount to Vertex.",Revenue/Profit Sharing,Yes
+"If any such quarterly detailed ledger statement shows negative Remaining Exposure for the period covered by the statement, then Vertex shall pay [****] percent ([****]%) of such amount to Bunker One.",Revenue/Profit Sharing,Yes
+If the Remaining Exposure shown on such final detailed ledger Statement is less than zero then Vertex shall pay [****] percent ([****]%) of such amount to Bunker One,Revenue/Profit Sharing,Yes
+If the Remaining Exposure shown on such final detailed ledger Statement is greater than zero then Bunker One shall pay [****] percent ([****]%) of such amount to Vertex.,Revenue/Profit Sharing,Yes
+In the event of a termination in accordance to clause 5.2 it is agreed that both parties agree to unwind and minimize costs and exit the JSMA as soon as practicably possible not exceeding 120 days.,Post-termination Services,Yes
+"Vertex has the right, at its sole expense and during normal working hours, to have a third party accountant examine the records of Bunker One.",Audit Rights,Yes
