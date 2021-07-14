@@ -1,4 +1,12 @@
 # NLP Contract Analytics
+virtual environment: 
+
+cd ~/Desktop/Galvanize/projects/transformers
+
+source tf/bin/activate
+
+
+
 In this project I'm building a machine learning model using natural language processing (NLP) to identify various contract clause types. My goal is that the model can recognize clauses in unseen contracts and categorize them with at least 70% accuracy.
 
 
