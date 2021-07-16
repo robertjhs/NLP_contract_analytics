@@ -57,7 +57,7 @@ def generate_table(dataframe, max_rows=5):
 app.layout = html.Div(children=[
     html.H1(children='NLP Contract Analytics Project'),
 
-    html.H4(children='''
+    html.H5(children='''
         by Robert Juhasz | Galvanize RPP2
     '''),
 
@@ -67,8 +67,15 @@ app.layout = html.Div(children=[
         placeholder='Enter text here...',
         value='',
         autoFocus='true',
-        style={'width': '70%', 'height': 200}),
+        style={'width': '70%', 'height': 150}),
     
+    dcc.RadioItems(
+        id='radio_summarizer',
+        options=[{'label': 'BART model | Pytorch', 'value': 'pyt'},
+                 {'label': 'T5-base model | TensorFlow', 'value': 'tf'}],
+        value='pyt'
+    ),  
+
     html.Br(),
     html.Button('Analyze text', id='button'),
 
@@ -99,51 +106,34 @@ app.layout = html.Div(children=[
     Output(component_id='textarea-example-output', component_property='children'),
     Output(component_id='table', component_property='data'),
     Input(component_id='button', component_property='n_clicks'),
+    State('radio_summarizer', 'value'),
     State('textarea-example', 'value')
 )
-def update_output(n_clicks, value):
+def update_output(n_clicks, radio_summarizer, text):
     if n_clicks is None:
         raise PreventUpdate
     else:
-        # summarization | Bart model with Pytorch
-        summarizer_pyt = pipeline("summarization")
-        summary_pyt = summarizer_pyt(value, min_length=5, max_length=100)
+        # summarization
+        print(radio_summarizer)
+        if radio_summarizer == 'pyt':
+            summarizer = pipeline("summarization")
+            summary = summarizer(text, min_length=5, max_length=100)
+        elif radio_summarizer == 'tf':
+            summarizer = pipeline("summarization", model="t5-base", tokenizer="t5-base", framework="tf")
+            summary = summarizer(text, min_length=5, max_length=100)
         
         # entity extraction
         tokenizer = AutoTokenizer.from_pretrained("dslim/bert-base-NER")
         model = AutoModelForTokenClassification.from_pretrained("dslim/bert-base-NER")
         nlp = pipeline("ner", model=model, tokenizer=tokenizer, grouped_entities=True)
-        ner_results = nlp(value)
-        df = ner_categories(ner_results,10)
+        ner_results = nlp(text)
+        if len(ner_results) > 0:        
+            df = ner_categories(ner_results,10)
+        else:
+            df = pd.DataFrame(data=[['','','']])
         data=df.to_dict('records')
-        return next(iter(summary_pyt[0].values())), data
-
-
-'''
-SUMMARIZATION with Huggingface Transformers
-'''
-
-# summarization | t5-base model with TensorFlow
-# summarizer_tf = pipeline("summarization", model="t5-base", tokenizer="t5-base", framework="tf")
-# summary_tf = summarizer_tf(value, min_length=5, max_length=100)
-
-
-# print(format_results(summary_pyt, 'Summary by Bart model with Pytorch'))
-# print(format_results(summary_tf, 'Summary by t5-base model with TensorFlow'))
-
-
-'''
-ENTITY EXTRACTION with Huggingface Transformers
-'''
-
-
-# tokenizer = AutoTokenizer.from_pretrained("dslim/bert-base-NER")
-# model = AutoModelForTokenClassification.from_pretrained("dslim/bert-base-NER")
-
-# nlp = pipeline("ner", model=model, tokenizer=tokenizer, grouped_entities=True)
-
-# ner_results = nlp(value)
-# df = ner_categories(ner_results)
+                
+        return next(iter(summary[0].values())), data
 
 
 if __name__ == '__main__':
