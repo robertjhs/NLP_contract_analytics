@@ -20,12 +20,13 @@ from dash.exceptions import PreventUpdate
 import dash_html_components as html
 import dash_core_components as dcc
 from dash_html_components import Br
+import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, title='NLP Contract Analytics', update_title=None, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, title='Contract Analytics | NLP', update_title=None, external_stylesheets=external_stylesheets)
 
 cols = ['Group', 'Entity text', 'Score']
 df = pd.DataFrame(data=[['','','']], columns=cols)
@@ -55,10 +56,10 @@ def generate_table(dataframe, max_rows=5):
     ])
 
 app.layout = html.Div(children=[
-    html.H1(children='NLP Contract Analytics Project'),
+    html.H1(children='Contract Analytics with Natural Language Processing'),
 
     html.H5(children='''
-        by Robert Juhasz | Galvanize RPP2
+        created by Robert Juhasz
     '''),
 
     html.Br(),
@@ -114,7 +115,6 @@ def update_output(n_clicks, radio_summarizer, text):
         raise PreventUpdate
     else:
         # summarization
-        print(radio_summarizer)
         if radio_summarizer == 'pyt':
             summarizer = pipeline("summarization")
             summary = summarizer(text, min_length=5, max_length=100)
