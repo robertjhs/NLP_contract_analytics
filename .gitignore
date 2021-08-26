@@ -1,2 +1,4 @@
 # large data files
 /local_data
+/data
+/models
