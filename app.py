@@ -23,6 +23,7 @@ from dash_html_components import Br
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
+from src import ocr
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
