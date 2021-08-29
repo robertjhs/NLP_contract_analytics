@@ -6,6 +6,7 @@
 import os
 import sys
 import warnings
+import base64
 from numpy.core.fromnumeric import size
 import pandas as pd
 
@@ -23,7 +24,10 @@ from dash_html_components import Br
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
-from src import ocr
+# from src import ocr
+import cv2
+import pdf2image as p2i
+import pytesseract as pt
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -31,6 +35,17 @@ app = dash.Dash(__name__, title='Contract Analytics | NLP', update_title=None, e
 
 cols = ['Group', 'Entity text', 'Score']
 df = pd.DataFrame(data=[['','','']], columns=cols)
+
+# OCR
+def ocr_process(data):
+    content_type, content_string = data.split(',')
+    decoded = base64.b64decode(content_string)
+    doc = p2i.convert_from_bytes(decoded)
+    whole_txt = ''
+    for page_number, page_data in enumerate(doc):
+        txt = pt.image_to_string(page_data)
+        whole_txt += txt
+    return whole_txt
 
 # convert results to a Pandas dataframe
 def ner_categories(ner,max_cols=5):
@@ -64,13 +79,37 @@ app.layout = html.Div(children=[
     '''),
 
     html.Br(),
-    dcc.Textarea(
-        id='textarea-example',
-        placeholder='Enter text here...',
-        value='',
-        autoFocus='true',
-        style={'width': '70%', 'height': 150}),
-    
+
+    dcc.Upload(
+        id='upload-data',
+        children=html.Div([
+            'Drag and Drop or ',
+            html.A('Select Files')
+        ]),
+        style={
+            'width': '50%',
+            'height': '60px',
+            'lineHeight': '60px',
+            'borderWidth': '1px',
+            'borderStyle': 'dashed',
+            'borderRadius': '5px',
+            'textAlign': 'center',
+        },
+    ),
+
+    html.Br(),
+    html.Br(),
+
+    dcc.Loading(
+        dcc.Textarea(
+            id='textarea-example',
+            placeholder='Enter text here...',
+            value='',
+            autoFocus='true',
+            style={'width': '50%', 'height': 150}),
+        type='dot'
+    ),
+
     dcc.RadioItems(
         id='radio_summarizer',
         options=[{'label': 'BART model | Pytorch', 'value': 'pyt'},
@@ -102,6 +141,16 @@ app.layout = html.Div(children=[
         style_cell={'width': 'auto'})
 
 ])
+
+
+@app.callback(
+    Output('textarea-example', 'value'),
+    Input('upload-data', 'contents'),
+    State('upload-data', 'filename'),
+)
+def update_output(contents, filename):
+    if contents is not None:
+        return ocr_process(contents)
 
 
 @app.callback(
