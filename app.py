@@ -31,7 +31,7 @@ import pytesseract as pt
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, title='Contract Analytics | NLP', update_title=None, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, title='Contract Analytics | NLP', update_title=None, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 cols = ['Group', 'Entity text', 'Score']
 df = pd.DataFrame(data=[['','','']], columns=cols)
@@ -71,12 +71,10 @@ def generate_table(dataframe, max_rows=5):
         ])
     ])
 
-app.layout = html.Div(children=[
-    html.H1(children='Contract Analytics with Natural Language Processing'),
+app.layout = dbc.Container(children=[
+    dbc.NavbarSimple(brand='Contract analytics with NLP', color='dark', dark=True, style={'font-size': '80px', 'font-weight': 'bold', 'height': '80px'}),
 
-    html.H5(children='''
-        created by Robert Juhasz
-    '''),
+    html.H6('created by Robert Juhasz', style={'font-style': 'italic'}),
 
     html.Br(),
 
@@ -87,7 +85,7 @@ app.layout = html.Div(children=[
             html.A('Select Files')
         ]),
         style={
-            'width': '50%',
+            'width': '100%',
             'height': '60px',
             'lineHeight': '60px',
             'borderWidth': '1px',
@@ -98,15 +96,14 @@ app.layout = html.Div(children=[
     ),
 
     html.Br(),
-    html.Br(),
 
     dcc.Loading(
         dcc.Textarea(
             id='textarea-example',
-            placeholder='Enter text here...',
+            placeholder='Upload file or enter text here...',
             value='',
             autoFocus='true',
-            style={'width': '50%', 'height': 150}),
+            style={'width': '100%', 'height': 150}),
         type='dot'
     ),
 
