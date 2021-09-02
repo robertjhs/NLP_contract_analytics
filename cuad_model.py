@@ -68,10 +68,6 @@ questions = [q for q in qtype_dict.values()]
 
 answers = []
 
-n = 2
-question = questions[n]
-label = labels[n]
-
 '''
 for question in questions:
     inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
@@ -90,15 +86,40 @@ for l, a in zip(labels, answers):
     print(f'{l}: {a}')
 '''
 
-inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
-input_ids = inputs["input_ids"].tolist()[0]
-outputs = model(**inputs)
-answer_start_scores = outputs.start_logits
-answer_end_scores = outputs.end_logits
-# Get the most likely beginning of answer with the argmax of the score
-answer_start = torch.argmax(answer_start_scores)
-# Get the most likely end of answer with the argmax of the score
-answer_end = torch.argmax(answer_end_scores) + 1
-answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+def get_one_pred(labels, questions, text, n):
+    question = questions[n]
+    label = labels[n]
 
-print(f'{label}: {answer}')
+    inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
+    input_ids = inputs["input_ids"].tolist()[0]
+    outputs = model(**inputs)
+    answer_start_scores = outputs.start_logits
+    answer_end_scores = outputs.end_logits
+    # Get the most likely beginning of answer with the argmax of the score
+    answer_start = torch.argmax(answer_start_scores)
+    # Get the most likely end of answer with the argmax of the score
+    answer_end = torch.argmax(answer_end_scores) + 1
+    answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+    return label, answer
+
+
+def get_all_preds(labels, questions, text, n):
+    question = questions[n]
+    label = labels[n]
+    answers = []
+ 
+    inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
+    input_ids = inputs["input_ids"].tolist()[0]
+    outputs = model(**inputs)
+    answer_start_scores = outputs.start_logits
+    answer_end_scores = outputs.end_logits
+    for answer_start_score, answer_end_score in zip(answer_start_scores, answer_end_scores):
+        answer_start = torch([answer_start_score])
+        answer_end = torch([answer_end_score])
+        answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+        answers.append(answer)
+    return label, answers
+
+label, answers = get_all_preds(labels, questions, text, n=1)
+print(label)
+print(answers)
