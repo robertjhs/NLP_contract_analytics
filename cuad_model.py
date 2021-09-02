@@ -103,6 +103,23 @@ def get_one_pred(labels, questions, text, n):
     return label, answer
 
 
+def pred_all_questions(labels, questions, text):
+    answers = []
+    for question in questions:
+        inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
+        input_ids = inputs["input_ids"].tolist()[0]
+        outputs = model(**inputs)
+        answer_start_scores = outputs.start_logits
+        answer_end_scores = outputs.end_logits
+        # Get the most likely beginning of answer with the argmax of the score
+        answer_start = torch.argmax(answer_start_scores)
+        # Get the most likely end of answer with the argmax of the score
+        answer_end = torch.argmax(answer_end_scores) + 1
+        answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+        answers.append(answer)
+    return labels, answers
+
+
 def get_all_preds(labels, questions, text, n):
     question = questions[n]
     label = labels[n]
@@ -120,6 +137,9 @@ def get_all_preds(labels, questions, text, n):
         answers.append(answer)
     return label, answers
 
-label, answers = get_all_preds(labels, questions, text, n=1)
-print(label)
-print(answers)
+
+
+
+labels, answers = pred_all_questions(labels, questions, text)
+for lab, ans in zip(labels, answers):
+    print(f'{lab}: {ans}')
