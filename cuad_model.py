@@ -3,12 +3,12 @@ import re
 from transformers import DebertaV2Tokenizer, DebertaV2ForQuestionAnswering
 import torch
 
-tokenizer = DebertaV2Tokenizer.from_pretrained('./models/deberta-v2-xlarge')
-model = DebertaV2ForQuestionAnswering.from_pretrained('./models/deberta-v2-xlarge')
 
 filepath = 'local_data/unlabeled_contracts/2020/000019119.txt'
+
 with open(filepath, 'r', encoding="utf-8") as file:
     contract = file.read().replace('\n', '')
+
 
 # Clean up and pre-process the text.
 def pre_process_text(text):
@@ -53,6 +53,7 @@ def pre_process_text(text):
 
 text = pre_process_text(contract)
 
+
 def get_questions_from_csv():
     df = pd.read_csv("./data/category_descriptions.csv")
     q_dict = {}
@@ -68,8 +69,8 @@ questions = [q for q in qtype_dict.values()]
 
 answers = []
 
-'''
-for question in questions:
+
+def get_one_pred(question, text):
     inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
     input_ids = inputs["input_ids"].tolist()[0]
     outputs = model(**inputs)
@@ -80,32 +81,13 @@ for question in questions:
     # Get the most likely end of answer with the argmax of the score
     answer_end = torch.argmax(answer_end_scores) + 1
     answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
-    answers.append(answer)
-
-for l, a in zip(labels, answers):
-    print(f'{l}: {a}')
-'''
-
-def get_one_pred(labels, questions, text, n):
-    question = questions[n]
-    label = labels[n]
-
-    inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
-    input_ids = inputs["input_ids"].tolist()[0]
-    outputs = model(**inputs)
-    answer_start_scores = outputs.start_logits
-    answer_end_scores = outputs.end_logits
-    # Get the most likely beginning of answer with the argmax of the score
-    answer_start = torch.argmax(answer_start_scores)
-    # Get the most likely end of answer with the argmax of the score
-    answer_end = torch.argmax(answer_end_scores) + 1
-    answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
-    return label, answer
+    return answer
 
 
-def pred_all_questions(labels, questions, text):
+def pred_all_questions(questions, text):
     answers = []
-    for question in questions:
+    for question in questions[0]:
+        print(question)
         inputs = tokenizer(question, text, padding='max_length', truncation='only_second', return_tensors='pt')
         input_ids = inputs["input_ids"].tolist()[0]
         outputs = model(**inputs)
@@ -117,7 +99,9 @@ def pred_all_questions(labels, questions, text):
         answer_end = torch.argmax(answer_end_scores) + 1
         answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
         answers.append(answer)
-    return labels, answers
+        print(answer)
+        # inputs = input_ids = outputs = answer_start = answer_start_scores = answer_end = answer_end_scores = answer = None
+    return answers
 
 
 def get_all_preds(labels, questions, text, n):
@@ -138,8 +122,13 @@ def get_all_preds(labels, questions, text, n):
     return label, answers
 
 
+tokenizer = DebertaV2Tokenizer.from_pretrained('./models/deberta-v2-xlarge')
+model = DebertaV2ForQuestionAnswering.from_pretrained('./models/deberta-v2-xlarge')
 
+answer = get_one_pred(questions[10], text)
+print(answer)
+    
 
-labels, answers = pred_all_questions(labels, questions, text)
-for lab, ans in zip(labels, answers):
-    print(f'{lab}: {ans}')
+# for i, question in enumerate(questions):
+#     answer = get_one_pred(question, text)
+#     print(f'{labels[i]}: {answer}')
