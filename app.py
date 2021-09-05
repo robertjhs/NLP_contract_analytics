@@ -72,7 +72,7 @@ def generate_table(dataframe, max_rows=5):
     ])
 
 app.layout = dbc.Container(children=[
-    dbc.NavbarSimple(brand='Contract analytics with NLP', color='dark', dark=True, style={'font-size': '80px', 'font-weight': 'bold', 'height': '80px'}),
+    dbc.NavbarSimple(brand='Contract Analytics with Natural Language Processing', color='dark', dark=True, style={'font-size': '80px', 'font-weight': 'bold', 'height': '80px'}),
 
     html.H6('created by Robert Juhasz', style={'font-style': 'italic'}),
 
@@ -115,7 +115,8 @@ app.layout = dbc.Container(children=[
     ),  
 
     html.Br(),
-    html.Button('Analyze text', id='button'),
+    # html.Button('Analyze text', id='button'),
+    dbc.Button('Analyze Contract', color='primary', className='mr-1', id='button'),
 
     html.Br(),
     html.Br(),
